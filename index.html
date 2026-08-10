@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Posteasy — AI Review Writing &amp; Publisher</title>
+<meta name="description" content="Posteasy helps you find businesses, draft better reviews with AI, and share them everywhere — Privacy Policy, Terms of Service, and Support.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #12141a;
+    --bg-raised: #191c24;
+    --border: #2a2e39;
+    --border-soft: #22252e;
+    --text: #eef0f4;
+    --text-dim: #9aa0ae;
+    --text-faint: #656b7a;
+    --accent: #e8a33d;
+    --accent-soft: rgba(232,163,61,0.12);
+    --teal: #4fb8a8;
+    --radius: 10px;
+    --max: 880px;
+  }
+
+  *{ box-sizing: border-box; margin: 0; padding: 0; }
+
+  html{ scroll-behavior: smooth; }
+
+  body{
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    line-height: 1.65;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection{ background: var(--accent-soft); color: var(--accent); }
+
+  a{ color: var(--accent); text-decoration: none; }
+  a:hover{ text-decoration: underline; }
+  a:focus-visible, button:focus-visible{ outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  h1,h2,h3,h4{
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--text);
+  }
+
+  .eyebrow{
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+  }
+
+  .wrap{
+    max-width: var(--max);
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  /* ---------- Header ---------- */
+  header{
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    background: rgba(18,20,26,0.86);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border-soft);
+  }
+
+  .nav-inner{
+    max-width: var(--max);
+    margin: 0 auto;
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .brand{
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    color: var(--text);
+  }
+
+  .brand .mark{
+    width: 26px; height: 26px;
+    border-radius: 7px;
+    background: linear-gradient(150deg, var(--accent), #c97f1f);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+    color: #171106;
+    font-weight: 700;
+  }
+
+  nav.links{
+    display: flex;
+    gap: 22px;
+    font-size: 14.5px;
+    font-weight: 500;
+  }
+  nav.links a{ color: var(--text-dim); }
+  nav.links a:hover{ color: var(--text); text-decoration: none; }
+
+  .nav-toggle{ display: none; }
+
+  /* ---------- Hero ---------- */
+  .hero{
+    padding: 96px 24px 72px;
+    border-bottom: 1px solid var(--border-soft);
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before{
+    content: "";
+    position: absolute;
+    top: -180px; right: -140px;
+    width: 460px; height: 460px;
+    background: radial-gradient(circle, rgba(232,163,61,0.14), transparent 68%);
+    pointer-events: none;
+  }
+  .hero-inner{
+    max-width: var(--max);
+    margin: 0 auto;
+    position: relative;
+  }
+  .hero h1{
+    font-size: clamp(36px, 5.4vw, 54px);
+    line-height: 1.08;
+    max-width: 620px;
+    margin: 18px 0 20px;
+  }
+  .hero h1 em{
+    font-style: normal;
+    color: var(--accent);
+  }
+  .hero p.lead{
+    font-size: 17.5px;
+    color: var(--text-dim);
+    max-width: 520px;
+    margin-bottom: 32px;
+  }
+  .stars-row{
+    display:flex;
+    gap: 4px;
+    margin-bottom: 22px;
+    color: var(--accent);
+    font-size: 18px;
+  }
+
+  .cta-row{ display: flex; gap: 14px; flex-wrap: wrap; }
+
+  .btn{
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 22px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14.5px;
+    border: 1px solid var(--border);
+    transition: border-color .15s ease, background .15s ease;
+  }
+  .btn-primary{
+    background: var(--accent);
+    color: #1a1206;
+    border-color: var(--accent);
+  }
+  .btn-primary:hover{ background: #f0af4d; text-decoration: none; }
+  .btn-ghost{ color: var(--text); background: transparent; }
+  .btn-ghost:hover{ border-color: var(--text-dim); text-decoration: none; }
+
+  /* ---------- Section shell ---------- */
+  section{ padding: 72px 24px; border-bottom: 1px solid var(--border-soft); }
+  section:last-of-type{ border-bottom: none; }
+  .section-head{ margin-bottom: 40px; max-width: 560px; }
+  .section-head h2{ font-size: 30px; margin: 10px 0 10px; }
+  .section-head p{ color: var(--text-dim); font-size: 15.5px; }
+
+  /* ---------- Pillars ---------- */
+  .pillars{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border-soft);
+    border: 1px solid var(--border-soft);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .pillar{
+    background: var(--bg-raised);
+    padding: 26px 24px;
+  }
+  .pillar .glyph{ color: var(--accent); font-size: 20px; margin-bottom: 12px; display: block; }
+  .pillar h3{ font-size: 15.5px; margin-bottom: 6px; }
+  .pillar p{ color: var(--text-dim); font-size: 14px; }
+
+  /* ---------- Feature grid ---------- */
+  .feature-grid{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+  .feature-card{
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 22px;
+    background: var(--bg-raised);
+  }
+  .feature-card .num{
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--text-faint);
+    display: block;
+    margin-bottom: 10px;
+  }
+  .feature-card h3{ font-size: 16px; margin-bottom: 8px; }
+  .feature-card p{ color: var(--text-dim); font-size: 14.2px; }
+  .chip-row{ display: flex; flex-wrap: wrap; gap: 7px; margin-top: 14px; }
+  .chip{
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11.5px;
+    padding: 5px 10px;
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    color: var(--text-dim);
+  }
+
+  /* ---------- Support / FAQ ---------- */
+  .support-box{
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 26px 28px;
+    background: var(--bg-raised);
+    margin-bottom: 32px;
+  }
+  .support-box h3{ font-size: 16px; margin-bottom: 8px; }
+  .support-box p{ color: var(--text-dim); font-size: 14.5px; margin-bottom: 14px; }
+  .contact-lines{ font-family: 'IBM Plex Mono', monospace; font-size: 13.5px; color: var(--text-dim); display: flex; flex-direction: column; gap: 4px; }
+
+  .faq-item{
+    border-bottom: 1px solid var(--border-soft);
+    padding: 18px 0;
+  }
+  .faq-item:first-of-type{ border-top: 1px solid var(--border-soft); }
+  .faq-item summary{
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 15px;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--text);
+  }
+  .faq-item summary::-webkit-details-marker{ display: none; }
+  .faq-item summary::after{
+    content: "+";
+    color: var(--accent);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 18px;
+    margin-left: 12px;
+  }
+  .faq-item[open] summary::after{ content: "–"; }
+  .faq-item p{ color: var(--text-dim); font-size: 14.5px; margin-top: 12px; max-width: 640px; }
+
+  /* ---------- Legal ---------- */
+  .legal-updated{
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12.5px;
+    color: var(--text-faint);
+    margin-bottom: 28px;
+  }
+  .legal h3{
+    font-size: 17px;
+    margin: 32px 0 10px;
+    color: var(--text);
+  }
+  .legal h3:first-of-type{ margin-top: 0; }
+  .legal h4{
+    font-size: 14.5px;
+    margin: 18px 0 8px;
+    color: var(--text-dim);
+  }
+  .legal p{ color: var(--text-dim); font-size: 14.8px; margin-bottom: 12px; max-width: 680px; }
+  .legal ul{ margin: 0 0 14px 20px; color: var(--text-dim); font-size: 14.8px; max-width: 680px; }
+  .legal li{ margin-bottom: 6px; }
+  .legal strong{ color: var(--text); font-weight: 600; }
+  .legal-toggle{
+    display: flex;
+    gap: 10px;
+    margin-bottom: 30px;
+  }
+  .legal-toggle button{
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12.5px;
+    padding: 8px 16px;
+    border-radius: 100px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text-dim);
+    cursor: pointer;
+  }
+  .legal-toggle button.active{
+    border-color: var(--accent);
+    color: var(--accent);
+    background: var(--accent-soft);
+  }
+  .legal-panel{ display: none; }
+  .legal-panel.active{ display: block; }
+
+  /* ---------- Footer ---------- */
+  footer{
+    padding: 40px 24px;
+  }
+  .footer-inner{
+    max-width: var(--max);
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .footer-inner .brand{ font-size: 15px; }
+  footer nav{ display: flex; gap: 18px; font-size: 13.5px; }
+  footer nav a{ color: var(--text-dim); }
+  footer p.copy{ color: var(--text-faint); font-size: 13px; width: 100%; margin-top: 18px; }
+
+  @media (max-width: 720px){
+    nav.links{ display: none; }
+    .pillars{ grid-template-columns: 1fr; }
+    .feature-grid{ grid-template-columns: 1fr; }
+    .hero{ padding: 72px 20px 56px; }
+    section{ padding: 56px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav-inner">
+    <div class="brand"><span class="mark">P</span>Posteasy</div>
+    <nav class="links">
+      <a href="#home">Home</a>
+      <a href="#features">Features</a>
+      <a href="#support">Support</a>
+      <a href="#privacy">Privacy</a>
+      <a href="#terms">Terms</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero" id="home">
+  <div class="hero-inner">
+    <p class="eyebrow">AI Review Writing &amp; Publisher · by newiracraft</p>
+    <h1>Reviews that sound like <em>you</em>, written in seconds.</h1>
+    <p class="lead">Posteasy finds the business, drafts the review, and gets it ready to post — across Google, Yelp, TripAdvisor, Trustpilot, and Facebook.</p>
+    <div class="cta-row">
+      <a class="btn btn-primary" href="#support">Get Support</a>
+      <a class="btn btn-ghost" href="#privacy">Privacy Policy</a>
+      <a class="btn btn-ghost" href="#terms">Terms of Service</a>
+    </div>
+  </div>
+</section>
+
+<section id="pillars-section">
+  <div class="wrap">
+    <div class="pillars">
+      <div class="pillar">
+        <span class="glyph">◈</span>
+        <h3>Find any business</h3>
+        <p>Live search with address, rating, phone, and map links — or draft for a business manually.</p>
+      </div>
+      <div class="pillar">
+        <span class="glyph">✦</span>
+        <h3>AI-drafted, your tone</h3>
+        <p>Pick a category, tone, and star rating. Posteasy writes a draft that still sounds like you.</p>
+      </div>
+      <div class="pillar">
+        <span class="glyph">◉</span>
+        <h3>Privacy first</h3>
+        <p>We collect only what's needed to run the service. Your drafts and data stay yours.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="features">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">What's inside</p>
+      <h2>Built for writing reviews people actually read.</h2>
+      <p>Every part of the flow — from finding the business to publishing the review — happens in one place.</p>
+    </div>
+
+    <div class="feature-grid">
+      <div class="feature-card">
+        <span class="num">01</span>
+        <h3>Business discovery</h3>
+        <p>Search live business listings for address, rating, phone, website, and a direct Google Maps link — or skip the lookup and draft for a custom business.</p>
+      </div>
+      <div class="feature-card">
+        <span class="num">02</span>
+        <h3>AI review generator</h3>
+        <p>Choose a category — Restaurant &amp; Dining, Retail, Healthcare, Home Services, Beauty &amp; Wellness, Automotive, Hospitality, or General Business.</p>
+        <div class="chip-row">
+          <span class="chip">Detailed</span>
+          <span class="chip">Enthusiastic</span>
+          <span class="chip">Professional</span>
+          <span class="chip">Concise</span>
+          <span class="chip">Constructive</span>
+          <span class="chip">Warm</span>
+        </div>
+      </div>
+      <div class="feature-card">
+        <span class="num">03</span>
+        <h3>Star ratings &amp; highlights</h3>
+        <p>Set 1 to 5 stars and tap feature chips like "Fast Service" or "Friendly Staff" to shape the draft's sentiment and detail.</p>
+      </div>
+      <div class="feature-card">
+        <span class="num">04</span>
+        <h3>Multiple drafts, one tap</h3>
+        <p>Generate up to three distinct variations, tweak with quick-add suggestion chips, then copy or post directly to your platform of choice.</p>
+      </div>
+      <div class="feature-card">
+        <span class="num">05</span>
+        <h3>Saved review history</h3>
+        <p>Every draft is archived. Filter, revisit, and copy past reviews whenever you need them again.</p>
+      </div>
+      <div class="feature-card">
+        <span class="num">06</span>
+        <h3>Stats &amp; milestones</h3>
+        <p>Track total reviews written, estimated time saved, and favourite categories, with badges as you go.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="support">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">We're here to help</p>
+      <h2>Support</h2>
+      <p>We usually reply within 1–2 business days.</p>
+    </div>
+
+    <div class="support-box">
+      <h3>Get in touch</h3>
+      <p>For help with the app, account issues, billing questions, or feedback — email us directly.</p>
+      <div class="contact-lines">
+        <span>Email — <a href="mailto:support@newiracraft.com">support@newiracraft.com</a></span>
+      </div>
+    </div>
+
+    <div class="faq-list">
+      <details class="faq-item">
+        <summary>How do I delete my account and data?</summary>
+        <p>Email <a href="mailto:support@newiracraft.com">support@newiracraft.com</a> with the subject "Delete My Account" from your registered email address. We'll complete the deletion within 30 days.</p>
+      </details>
+      <details class="faq-item">
+        <summary>How do I cancel a subscription?</summary>
+        <p>Subscriptions are managed through Google Play (or the Apple App Store, where applicable). Open your device's subscription settings, find Posteasy, and tap Cancel. Cancellation takes effect at the end of the current billing period.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Can I request a refund?</summary>
+        <p>Refunds are handled by Google or Apple depending on where you purchased. Visit Google Play's refund support page, or Apple's Report a Problem page, to submit a request.</p>
+      </details>
+      <details class="faq-item">
+        <summary>The app isn't working — what should I do?</summary>
+        <p>Try closing and reopening Posteasy, and make sure you're on the latest version from the Play Store. Still stuck? Email us with your device model and OS version.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Is my data private?</summary>
+        <p>Yes. We collect only what's needed to run the service and never sell your data. See the full <a href="#privacy">Privacy Policy</a> below.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<section id="legal">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">Legal</p>
+      <h2>Privacy Policy &amp; Terms of Service</h2>
+    </div>
+
+    <div class="legal-toggle">
+      <button type="button" class="active" data-target="privacy" onclick="showLegal('privacy', this)">Privacy Policy</button>
+      <button type="button" data-target="terms" onclick="showLegal('terms', this)">Terms of Service</button>
+    </div>
+
+    <div id="privacy" class="legal-panel active" >
+      <div>
+        <p class="legal-updated">Last updated: 11 August 2026</p>
+        <div class="legal">
+          <p>newiracraft ("we", "us", or "our") operates Posteasy and other mobile and web applications. This Privacy Policy explains how we collect, use, disclose, and protect your information when you use Posteasy.</p>
+          <p>By using Posteasy, you agree to the practices described in this policy. If you do not agree, please discontinue use.</p>
+
+          <h3>1. Information We Collect</h3>
+          <h4>1.1 Information You Provide</h4>
+          <ul>
+            <li><strong>Account information:</strong> Name, email address, and password, if you create an account.</li>
+            <li><strong>User-generated content:</strong> Business details, review drafts, star ratings, tone and category selections, and any text you enter into the app.</li>
+            <li><strong>Communications:</strong> Messages you send us via support or feedback channels.</li>
+          </ul>
+          <h4>1.2 Information Collected Automatically</h4>
+          <ul>
+            <li><strong>Usage data:</strong> Features used, session duration, in-app actions, and crash reports.</li>
+            <li><strong>Device information:</strong> Device type, operating system version, unique identifiers, and app version.</li>
+            <li><strong>Log data:</strong> IP address, access times, and screens viewed.</li>
+          </ul>
+          <h4>1.3 Information From Third Parties</h4>
+          <ul>
+            <li><strong>Authentication providers:</strong> If you sign in via Google or Apple, we receive your name and email from those providers.</li>
+            <li><strong>Payment processors:</strong> Subscription payments, where applicable, are handled by Google Play or the Apple App Store. We do not store your payment card details.</li>
+            <li><strong>Business &amp; place data:</strong> When you search for a business, your search query is sent to Google Maps Places API to return address, rating, phone, website, and map details. We do not use this to track your real-time location.</li>
+          </ul>
+
+          <h3>2. How We Use Your Information</h3>
+          <ul>
+            <li>Provide, operate, and improve Posteasy.</li>
+            <li>Generate AI-assisted review drafts based on the details and preferences you provide.</li>
+            <li>Process and fulfil any subscription.</li>
+            <li>Send service-related emails (e.g. receipts, security alerts). We do not send marketing emails without your explicit consent.</li>
+            <li>Respond to your support requests.</li>
+            <li>Monitor and analyse usage to improve the app.</li>
+            <li>Detect, investigate, and prevent fraudulent or illegal activity, including misuse for fake or misleading reviews.</li>
+            <li>Comply with legal obligations.</li>
+          </ul>
+
+          <h3>3. AI Processing</h3>
+          <p>Posteasy uses Google's Gemini AI to generate review drafts. The business details, category, tone, star rating, and highlights you select are sent to Gemini to produce a draft. This text is processed under Google's applicable API terms and privacy policy. We do not use your content to train AI models without your explicit consent.</p>
+
+          <h3>4. Sharing of Information</h3>
+          <p>We do not sell your personal information. We may share information with:</p>
+          <ul>
+            <li><strong>Service providers:</strong> Cloud hosting, analytics, and AI or mapping APIs (including Google Maps Platform and Google Gemini), bound by confidentiality obligations.</li>
+            <li><strong>Legal requirements:</strong> Where required by law, court order, or government authority.</li>
+            <li><strong>Business transfers:</strong> In connection with a merger, acquisition, or sale of assets, with notice to you.</li>
+            <li><strong>With your consent:</strong> For any other purpose disclosed at the time of collection.</li>
+          </ul>
+
+          <h3>5. Data Retention</h3>
+          <p>We retain your information for as long as your account is active or as needed to provide the service, including your saved review drafts and history. You may request deletion of your account and associated data at any time — see the Support section above. We action deletion requests within 30 days, except where retention is required by law.</p>
+
+          <h3>6. Security</h3>
+          <p>We implement appropriate technical and organisational measures to protect your information against unauthorised access, alteration, disclosure, or destruction. No internet transmission or electronic storage is 100% secure, and we cannot guarantee absolute security.</p>
+
+          <h3>7. Children's Privacy</h3>
+          <p>Posteasy is not directed at children under the age of 13 (or 16 where required by local law). We do not knowingly collect personal information from children. If you believe we have inadvertently collected information from a child, contact us and we will delete it.</p>
+
+          <h3>8. Your Rights</h3>
+          <p>Depending on your location, you may have rights including access to your personal data, correction of inaccurate data, deletion, data portability, and objection to certain processing. To exercise these rights, contact us at <a href="mailto:support@newiracraft.com">support@newiracraft.com</a>.</p>
+
+          <h3>9. Cookies &amp; Tracking</h3>
+          <p>Our web services may use cookies and similar technologies for authentication and analytics. You can control cookie settings through your browser. Disabling cookies may affect some functionality.</p>
+
+          <h3>10. Changes to This Policy</h3>
+          <p>We may update this Privacy Policy from time to time. We will notify you of significant changes by updating the date at the top of this page and, where appropriate, by in-app notification. Continued use after changes constitutes acceptance.</p>
+
+          <h3>11. Contact Us</h3>
+          <p><strong>newiracraft</strong><br>Brisbane, Queensland, Australia<br>Email: <a href="mailto:support@newiracraft.com">support@newiracraft.com</a></p>
+        </div>
+      </div>
+    </div>
+
+    <div id="terms" class="legal-panel">
+      <div>
+        <p class="legal-updated">Last updated: 11 August 2026</p>
+        <div class="legal">
+          <p>These Terms of Service ("Terms") govern your access to and use of Posteasy, provided by newiracraft ("we", "us", or "our").</p>
+          <p>By downloading, installing, or using Posteasy, you agree to be bound by these Terms. If you do not agree, do not use the app.</p>
+
+          <h3>1. Eligibility</h3>
+          <p>You must be at least 13 years of age (or the minimum age required in your jurisdiction) to use Posteasy. By using the app you represent that you meet this requirement. If you are under 18, you confirm you have permission from a parent or guardian.</p>
+
+          <h3>2. Account Registration</h3>
+          <p>Some features require an account. You agree to provide accurate information, keep your credentials confidential, notify us of any unauthorised access, and accept responsibility for all activity under your account. We reserve the right to suspend or terminate accounts that violate these Terms.</p>
+
+          <h3>3. Subscriptions &amp; Payments</h3>
+          <ul>
+            <li>Where offered, subscriptions are billed in advance on a recurring basis (monthly or annual) via Google Play or the Apple App Store.</li>
+            <li>Prices are displayed in Australian Dollars (AUD) where applicable and may vary by region.</li>
+            <li>Subscriptions automatically renew unless cancelled at least 24 hours before the end of the current period.</li>
+            <li>You can manage or cancel your subscription through your Google Play or App Store account settings.</li>
+            <li>Refunds are subject to the policies of Google or Apple, as applicable.</li>
+            <li>We may change pricing with reasonable notice. Continued use constitutes acceptance.</li>
+          </ul>
+
+          <h3>4. Acceptable Use</h3>
+          <p>You agree not to use Posteasy to: violate any law; generate or post false, misleading, deceptive, or defamatory reviews; misrepresent your own experience with a business; harass or harm others; attempt unauthorised access to our systems; reverse engineer the app; use bots or scrapers; resell the service; or upload malicious code. We may suspend or terminate access for violations without notice.</p>
+
+          <h3>5. User Content &amp; Reviews</h3>
+          <p>You retain ownership of content you create using Posteasy. By using the app, you grant us a limited, non-exclusive licence to process and store your content solely to provide the service to you. You are solely responsible for any review or content you choose to publish, including its accuracy and compliance with the terms of the platform you post it to (e.g. Google, Yelp, TripAdvisor, Trustpilot, Facebook). Do not submit content that is illegal, defamatory, fraudulent, or infringes third-party rights.</p>
+
+          <h3>6. AI Features</h3>
+          <p>Posteasy includes AI-powered features, using services such as Google Gemini, to help draft reviews. These features are provided as-is and for assistance purposes only. AI-generated drafts are suggestions and may be inaccurate or not reflect your actual experience — always review, edit, and confirm a draft reflects your genuine opinion before publishing it anywhere. We are not responsible for content you choose to publish.</p>
+
+          <h3>7. Third-Party Services &amp; Links</h3>
+          <p>Posteasy integrates with third-party services, including Google Maps Platform for business search and external review platforms for posting. Your use of those services is subject to their own terms and privacy policies. We are not responsible for the availability or content of third-party services.</p>
+
+          <h3>8. Intellectual Property</h3>
+          <p>All content, design, code, branding, and trademarks in Posteasy are owned by newiracraft or its licensors and protected by intellectual property law. You may not copy, reproduce, or distribute any part of the app without prior written consent.</p>
+
+          <h3>9. Disclaimer of Warranties</h3>
+          <p>Posteasy is provided "as is" and "as available" without warranties of any kind, express or implied. To the fullest extent permitted by law, we disclaim all implied warranties including merchantability, fitness for a particular purpose, and non-infringement.</p>
+
+          <h3>10. Limitation of Liability</h3>
+          <p>To the maximum extent permitted by law, newiracraft shall not be liable for any indirect, incidental, special, consequential, or punitive damages, including any arising from reviews you publish. Our total liability for any claim shall not exceed the amount you paid us in the 12 months preceding the claim, or AUD $100, whichever is greater.</p>
+
+          <h3>11. Governing Law</h3>
+          <p>These Terms are governed by the laws of Queensland, Australia. Any disputes shall be subject to the exclusive jurisdiction of the courts of Queensland, Australia.</p>
+
+          <h3>12. Changes to These Terms</h3>
+          <p>We may update these Terms from time to time. We will notify you of material changes via in-app notification or email. Continued use after the effective date constitutes acceptance.</p>
+
+          <h3>13. Contact Us</h3>
+          <p><strong>newiracraft</strong><br>Brisbane, Queensland, Australia<br>Email: <a href="mailto:support@newiracraft.com">support@newiracraft.com</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="brand"><span class="mark">P</span>Posteasy</div>
+    <nav>
+      <a href="#home">Home</a>
+      <a href="#features">Features</a>
+      <a href="#support">Support</a>
+      <a href="#privacy">Privacy Policy</a>
+      <a href="#terms">Terms of Service</a>
+    </nav>
+    <p class="copy">© 2026 newiracraft. All rights reserved. Posteasy is developed and operated by newiracraft, Brisbane, Queensland, Australia.</p>
+  </div>
+</footer>
+
+<script>
+  function showLegal(targetId, btn){
+    document.querySelectorAll('.legal-panel').forEach(function(p){ p.classList.remove('active'); });
+    document.getElementById(targetId).classList.add('active');
+    document.querySelectorAll('.legal-toggle button').forEach(function(b){ b.classList.remove('active'); });
+    btn.classList.add('active');
+  }
+
+  // Deep-link support: #terms opens Terms tab, #privacy opens Privacy tab
+  window.addEventListener('hashchange', syncLegalFromHash);
+  function syncLegalFromHash(){
+    if(location.hash === '#terms'){
+      showLegal('terms', document.querySelector('[data-target="terms"]'));
+    } else if(location.hash === '#privacy'){
+      showLegal('privacy', document.querySelector('[data-target="privacy"]'));
+    }
+  }
+  syncLegalFromHash();
+</script>
+
+</body>
+</html>
