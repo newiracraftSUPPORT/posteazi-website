@@ -181,6 +181,15 @@
   .btn-ghost{ color: var(--text); background: transparent; }
   .btn-ghost:hover{ border-color: var(--text-dim); text-decoration: none; }
 
+  .hero-img{
+    margin-top: 40px;
+    width: 100%;
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    box-shadow: 0 24px 60px -30px rgba(0,0,0,0.8);
+    display: block;
+  }
+
   /* ---------- Section shell ---------- */
   section{ padding: 72px 24px; border-bottom: 1px solid var(--border-soft); }
   section:last-of-type{ border-bottom: none; }
@@ -235,6 +244,36 @@
     border: 1px solid var(--border);
     border-radius: 100px;
     color: var(--text-dim);
+  }
+
+  /* ---------- Gallery ---------- */
+  .gallery-track{
+    display: flex;
+    gap: 14px;
+    overflow-x: auto;
+    padding: 4px 4px 16px;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+  }
+  .gallery-track figure{
+    flex: 0 0 250px;
+    scroll-snap-align: start;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: var(--bg-raised);
+  }
+  .gallery-track img{
+    width: 100%;
+    display: block;
+    aspect-ratio: 1280 / 2650;
+    object-fit: cover;
+  }
+  .gallery-track figcaption{
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11.5px;
+    color: var(--text-faint);
+    padding: 10px 12px;
   }
 
   /* ---------- Support / FAQ ---------- */
@@ -372,6 +411,7 @@
       <a class="btn btn-ghost" href="#privacy">Privacy Policy</a>
       <a class="btn btn-ghost" href="#terms">Terms of Service</a>
     </div>
+    <img class="hero-img" src="images/feature.png" alt="Posteazi app feature overview" loading="lazy">
   </div>
 </section>
 
@@ -444,6 +484,26 @@
         <h3>Stats &amp; milestones</h3>
         <p>Track total reviews written, estimated time saved, and favourite categories, with badges as you go.</p>
       </div>
+    </div>
+  </div>
+</section>
+
+<section id="gallery">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">See it in action</p>
+      <h2>A walk through the app.</h2>
+      <p>Swipe or scroll to see Posteazi from find-the-business to post-the-review.</p>
+    </div>
+    <div class="gallery-track">
+      <figure><img src="images/1.jpg" alt="Posteazi screen 1" loading="lazy"></figure>
+      <figure><img src="images/2.jpg" alt="Posteazi screen 2" loading="lazy"></figure>
+      <figure><img src="images/3.jpg" alt="Posteazi screen 3" loading="lazy"></figure>
+      <figure><img src="images/4.jpg" alt="Posteazi screen 4" loading="lazy"></figure>
+      <figure><img src="images/5.jpg" alt="Posteazi screen 5" loading="lazy"></figure>
+      <figure><img src="images/6.jpg" alt="Posteazi screen 6" loading="lazy"></figure>
+      <figure><img src="images/7.jpg" alt="Posteazi screen 7" loading="lazy"></figure>
+      <figure><img src="images/8.jpg" alt="Posteazi screen 8" loading="lazy"></figure>
     </div>
   </div>
 </section>
